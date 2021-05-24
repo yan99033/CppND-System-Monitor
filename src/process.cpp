@@ -1,33 +1,61 @@
+#include "process.h"
+
 #include <unistd.h>
+
 #include <cctype>
 #include <sstream>
 #include <string>
 #include <vector>
 
-#include "process.h"
+#include <iostream>
 
 using std::string;
 using std::to_string;
 using std::vector;
 
+std::map<int, std::tuple<long, long>> Process::process_loads;
+
 // TODO: Return this process's ID
-int Process::Pid() { return 0; }
+int Process::Pid() { return pid_; }
 
 // TODO: Return this process's CPU utilization
-float Process::CpuUtilization() { return 0; }
+float Process::CpuUtilization() { 
+  cpu_usage_ = 0;
+  // Previous timing found
+  if (Process::process_loads.find(pid_) != Process::process_loads.end()) {
+    long total_time_prev = std::get<0>(Process::process_loads[pid_]);
+    long elapsed_prev = std::get<1>(Process::process_loads[pid_]);
+
+    std::cout << "Prev timing found: " << total_time_ << " " << total_time_prev << " " << elapsed_ << " " << elapsed_prev;
+    cpu_usage_ = (float)(total_time_ - total_time_prev) / (elapsed_ - elapsed_prev);
+  }
+  else {
+    cpu_usage_ = (float)total_time_ / elapsed_;
+  }
+
+  // Save the timing for future use
+  Process::process_loads[pid_] = std::make_tuple(total_time_, elapsed_);
+
+  return cpu_usage_;
+
+  // return cpu_usage_; 
+}
 
 // TODO: Return the command that generated this process
-string Process::Command() { return string(); }
+string Process::Command() { return command_; }
 
 // TODO: Return this process's memory utilization
-string Process::Ram() { return string(); }
+string Process::Ram() { return ram_; }
 
 // TODO: Return the user (name) that generated this process
-string Process::User() { return string(); }
+string Process::User() { return user_; }
 
 // TODO: Return the age of this process (in seconds)
-long int Process::UpTime() { return 0; }
+long int Process::UpTime() { return uptime_; }
 
 // TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a[[maybe_unused]]) const { return true; }
+bool Process::operator<(Process const& a) const 
+{ 
+  return a.cpu_usage_ < cpu_usage_; 
+}
