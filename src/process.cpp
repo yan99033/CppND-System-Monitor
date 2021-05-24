@@ -19,19 +19,20 @@ using std::vector;
 
 std::map<int, std::tuple<float, float>> Process::process_loads;
 
-// TODO: Return this process's ID
+// (DONE) TODO: Return this process's ID
 int Process::Pid() const { return pid_; }
 
-// TODO: Return this process's CPU utilization
+// (DONE) TODO: Return this process's CPU utilization
 float Process::CpuUtilization() const { 
   return cpu_usage_;
 }
 
 // The output is similar to htop
+// Not sure if the formula is correct, though.
+// Some of the utilizations are slightly overestimated, and some are underestimated
 void Process::ComputeCpuUtilization() {
   float total_time = (float)LinuxParser::ActiveJiffies(pid_);
   float elapsed = (float)LinuxParser::UpTime(pid_);
-  // float cpu_usage = (total_time / sysconf(_SC_CLK_TCK)) / elapsed;
 
   float total_time_prev = 0, elapsed_prev = 0;
   if (Process::process_loads.find(pid_) != Process::process_loads.end()) {
@@ -63,27 +64,34 @@ void Process::ComputeCpuUtilization() {
   }
 }
 
-// TODO: Return the command that generated this process
+// (DONE) TODO: Return the command that generated this process
 string Process::Command() { 
   return LinuxParser::Command(pid_);
 }
 
-// TODO: Return this process's memory utilization
-string Process::Ram() { return LinuxParser::Ram(pid_); }
+// (DONE) TODO: Return this process's memory utilization
+string Process::Ram() { 
+  return LinuxParser::Ram(pid_); 
+}
 
-// TODO: Return the user (name) that generated this process
-string Process::User() { return LinuxParser::User(pid_); }
+// (DONE) TODO: Return the user (name) that generated this process
+string Process::User() { 
+  return LinuxParser::User(pid_); 
+}
 
-// TODO: Return the age of this process (in seconds)
-long int Process::UpTime() { return LinuxParser::UpTime(pid_); }
+// (DONE) TODO: Return the age of this process (in seconds)
+long int Process::UpTime() { 
+  return LinuxParser::UpTime(pid_);
+}
 
-// TODO: Overload the "less than" comparison operator for Process objects
+//(DONE)  TODO: Overload the "less than" comparison operator for Process objects
 // REMOVE: [[maybe_unused]] once you define the function
-bool Process::operator<(Process const& a) const 
-{ 
+bool Process::operator<(Process const& a) const { 
   return a.CpuUtilization() < CpuUtilization(); 
 }
 
+
+// Added helper function to prevent the obsolete processes from piling up
 void Process::RemoveOldProcesses(const vector<int>& new_pids) {
   // To ensure O(n) time complexity, we introduce another set, 
   // which results in O(n) space complexity

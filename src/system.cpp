@@ -18,10 +18,12 @@ using std::size_t;
 using std::string;
 using std::vector;
 
-// TODO: Return the system's CPU
-Processor& System::Cpu() { return cpu_; }
+// (DONE) TODO: Return the system's CPU
+Processor& System::Cpu() { 
+  return cpu_; 
+}
 
-// TODO: Return a container composed of the system's processes
+// (DONE) TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() {
   vector<int> process_ids = LinuxParser::Pids();
 
@@ -29,15 +31,20 @@ vector<Process>& System::Processes() {
   processes_.clear();
   
   for (int pid : process_ids) {
-    processes_.push_back(Process(pid)); 
-    
+    // Not sure why LinuxParser::Pids() picks up phantom processes
+    // Workaround: only insert the processes that have a valid command
+    Process process(pid);
+    if (!process.Command().empty())
+      processes_.push_back(process);
+
+    // processes_.push_back(Process(pid));
   }
 
   std::sort(processes_.begin(), processes_.end(), []( Process const& lhs, Process const& rhs) {
     return lhs < rhs;
   });
 
-  // Clean up the old processes
+  // Clean up the old process timings
   Process::RemoveOldProcesses(process_ids);
 
   return processes_;

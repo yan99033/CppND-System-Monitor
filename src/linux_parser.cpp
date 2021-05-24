@@ -129,13 +129,13 @@ long LinuxParser::UpTime() {
 // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
 // https://man7.org/linux/man-pages/man5/proc.5.html
 
-// TODO: Read and return the number of jiffies for the system
+// (DONE) TODO: Read and return the number of jiffies for the system
 // Currently not being used
 long LinuxParser::Jiffies() {
   return LinuxParser::IdleJiffies() + LinuxParser::ActiveJiffies();
 }
 
-// TODO: Read and return the number of active jiffies for a PID
+// (DONE) TODO: Read and return the number of active jiffies for a PID
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::ActiveJiffies(int pid) {
   long activejiffies = 0;
@@ -164,7 +164,7 @@ long LinuxParser::ActiveJiffies(int pid) {
   return activejiffies;
 }
 
-// TODO: Read and return the number of active jiffies for the system
+// (DONE) TODO: Read and return the number of active jiffies for the system
 long LinuxParser::ActiveJiffies() {
   // According to
   // https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
@@ -192,7 +192,7 @@ long LinuxParser::ActiveJiffies() {
           steal);  // sysconf(_SC_CLK_TCK);
 }
 
-// TODO: Read and return the number of idle jiffies for the system
+// (DONE) TODO: Read and return the number of idle jiffies for the system
 long LinuxParser::IdleJiffies() {
   // pretty much identical to LinuxParser::ActiveJiffies, except for
   // the components being added. Would be better to merge the two into one
@@ -224,7 +224,7 @@ long LinuxParser::IdleJiffies() {
 // vector<string>  LinuxParser::CpuUtilization() {
 // }
 
-// TODO: Read and return the total number of processes
+// (DONE) TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() {
   int totalprocesses = 0;
   string line, str;
@@ -245,7 +245,7 @@ int LinuxParser::TotalProcesses() {
   return totalprocesses;
 }
 
-// TODO: Read and return the number of running processes
+// (DONE) TODO: Read and return the number of running processes
 int LinuxParser::RunningProcesses() {
   int procsrunning = 0;
   string line, str;
@@ -266,7 +266,7 @@ int LinuxParser::RunningProcesses() {
   return procsrunning;
 }
 
-// TODO: Read and return the command associated with a process
+// (DONE) TODO: Read and return the command associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Command(int pid) {
   string cmd;
@@ -278,7 +278,7 @@ string LinuxParser::Command(int pid) {
   return cmd;
 }
 
-// TODO: Read and return the memory used by a process
+// (DONE) TODO: Read and return the memory used by a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Ram(int pid) {
   string ram;
@@ -303,7 +303,7 @@ string LinuxParser::Ram(int pid) {
   return ram.substr(0, ram.length() - 3);
 }
 
-// TODO: Read and return the user ID associated with a process
+// (DONE) TODO: Read and return the user ID associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Uid(int pid) {
   string uid;
@@ -325,7 +325,7 @@ string LinuxParser::Uid(int pid) {
   return uid;
 }
 
-// TODO: Read and return the user associated with a process
+// (DONE) TODO: Read and return the user associated with a process
 // REMOVE: [[maybe_unused]] once you define the function
 // NOTE: modified signature! ( the argument name is changed to uid)
 // It makes more sense to use uid as we are finding the corresponding username
@@ -369,7 +369,7 @@ string LinuxParser::User(int pid) {
     return user;
 }
 
-// TODO: Read and return the uptime of a process
+// (DONE) TODO: Read and return the uptime of a process
 // REMOVE: [[maybe_unused]] once you define the function
 long LinuxParser::UpTime(int pid) {
   long starttime = 0;

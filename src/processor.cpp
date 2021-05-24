@@ -4,7 +4,7 @@
 
 #include "linux_parser.h"
 
-// TODO: Return the aggregate CPU utilization
+// (DONE) TODO: Return the aggregate CPU utilization
 float Processor::Utilization() {
   float nonidle = (float)LinuxParser::ActiveJiffies();
   float idle = (float)LinuxParser::IdleJiffies();
