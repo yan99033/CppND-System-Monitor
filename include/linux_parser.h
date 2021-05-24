@@ -41,7 +41,10 @@ enum CPUStates {
   kGuestNice_
 };
 
-std::vector<std::string> CpuUtilization();
+// https://knowledge.udacity.com/questions/141752
+// I still can't understand the intuition behind this approach
+// std::vector<std::string> CpuUtilization();
+
 
 long Jiffies();
 long ActiveJiffies();

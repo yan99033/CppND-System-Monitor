@@ -23,37 +23,19 @@ Processor& System::Cpu() { return cpu_; }
 
 // TODO: Return a container composed of the system's processes
 vector<Process>& System::Processes() {
-  vector<string> processes = LinuxParser::CpuUtilization();
+  vector<int> process_ids = LinuxParser::Pids();
 
-  // Clear the previous processes
+  // Clear the old processes
   processes_.clear();
   
-  for (string p : processes) {
-    std::stringstream ss;
-    ss.str(p);
-    string pid, usage, total_time, elapsed, command, ram, uptime, user;
+  for (int pid : process_ids) {
+    processes_.push_back(Process(pid)); 
     
-    std::getline(ss, pid);
-    // std::getline(ss, usage);
-    std::getline(ss, total_time);
-    std::getline(ss, elapsed);
-    std::getline(ss, command);
-    std::getline(ss, ram);
-    std::getline(ss, uptime);
-    std::getline(ss, user);
-
-    // processes_.push_back(Process(std::stoi(pid), user, command, std::stof(usage),
-    //         ram, std::stol(uptime))); 
-    Process process(std::stoi(pid), user, command, std::stol(total_time),
-            std::stol(elapsed), ram, std::stol(uptime));
-    process.CpuUtilization();
-    processes_.push_back(process); 
   }
 
   std::sort(processes_.begin(), processes_.end(), []( Process const& lhs, Process const& rhs) {
     return lhs < rhs;
   });
-
 
   return processes_;
 }

@@ -161,7 +161,7 @@ long LinuxParser::ActiveJiffies(int pid) {
     }
   }
 
-  return activejiffies / sysconf(_SC_CLK_TCK);
+  return activejiffies;
 }
 
 // TODO: Read and return the number of active jiffies for the system
@@ -218,38 +218,39 @@ long LinuxParser::IdleJiffies() {
 }
 
 // TODO: Read and return CPU utilization
-vector<string>  LinuxParser::CpuUtilization() {
-  // Get a list of process ids
-  vector<int> process_ids = LinuxParser::Pids();
+// vector<string>  LinuxParser::CpuUtilization() {
 
-  // Compute the CPU load for every process
-  vector<string> utilization;
-  for (int pid : process_ids) {
+//   // Get a list of process ids
+//   vector<int> process_ids = LinuxParser::Pids();
 
-    // CPU load
-    long uptime = LinuxParser::UpTime(pid);
-    float total_time = (float)LinuxParser::ActiveJiffies(pid);
-    float elapsed = (float)uptime;
-    // string usage = std::to_string((total_time / elapsed));
+//   // Compute the CPU load for every process
+//   vector<string> utilization;
+//   for (int pid : process_ids) {
 
-    // other attributes
-    string command = LinuxParser::Command(pid);
-    string ram = LinuxParser::Ram(pid);
-    string user = LinuxParser::User(pid);
+//     // CPU load
+//     long uptime = LinuxParser::UpTime(pid);
+//     float total_time = (float)LinuxParser::ActiveJiffies(pid);
+//     float elapsed = (float)uptime;
+//     // string usage = std::to_string((total_time / elapsed));
 
-    // NOTE:
-    // On my computer, there are pids that couldn't be found, yet picked up by LinuxParser::Pids()
-    // Checked the /proc directory and htop and indeed some of the pids don't exist.
-    // A workaround is to check if a user of the pid can be found, if not, the process is not going to 
-    // be created.
-    if (user != "NOTFOUND" && command != "" && ram != "")
-      utilization.push_back(std::to_string(pid) + "\n" + std::to_string(total_time) + "\n" + 
-                          std::to_string(elapsed) + "\n" + command + "\n" + ram + "\n" + 
-                          std::to_string(uptime) + "\n" + user);
-  }
+//     // other attributes
+//     string command = LinuxParser::Command(pid);
+//     string ram = LinuxParser::Ram(pid);
+//     string user = LinuxParser::User(pid);
 
-  return utilization;
-}
+//     // NOTE:
+//     // On my computer, there are pids that couldn't be found, yet picked up by LinuxParser::Pids()
+//     // Checked the /proc directory and htop and indeed some of the pids don't exist.
+//     // A workaround is to check if a user of the pid can be found, if not, the process is not going to 
+//     // be created.
+//     if (user != "NOTFOUND" && command != "" && ram != "")
+//       utilization.push_back(std::to_string(pid) + "\n" + std::to_string(total_time) + "\n" + 
+//                           std::to_string(elapsed) + "\n" + command + "\n" + ram + "\n" + 
+//                           std::to_string(uptime) + "\n" + user);
+//   }
+
+//   return utilization;
+// }
 
 // TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() {
