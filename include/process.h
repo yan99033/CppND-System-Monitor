@@ -4,6 +4,7 @@
 #include <string>
 #include <tuple>
 #include <map>
+#include <vector>
 /*
 Basic class for Process representation
 It contains relevant attributes as shown below
@@ -21,13 +22,14 @@ class Process {
   long int UpTime();                       // TODO: See src/process.cpp
   bool operator<(Process const & a) const;  // TODO: See src/process.cpp
 
+  // Make sure that the old processes don't pile up
+  static void RemoveOldProcesses(const std::vector<int>& new_pids);
+
   // TODO: Declare any necessary private members
  // Won't change throughout the lifetime of the process
  private:
   int pid_;
   float cpu_usage_;
-  std::string user_{std::string()};
-  std::string command_{std::string()};
 
   // Helper method to compute cpu utilization
   void ComputeCpuUtilization();
@@ -35,12 +37,8 @@ class Process {
   // Save the previous timing of the processes and share them across 
   // process instances, so that we can compute more recent CPU usage of the 
   // processes. key: pid; value: (total_time, seconds)
-  // NOTE: need to remove the obsolete processes
-  // Stuck here. Not sure how to calculate the current CPU load.
-  // Suggestions?
   // https://stackoverflow.com/questions/16726779/how-do-i-get-the-total-cpu-usage-of-an-application-from-proc-pid-stat/16736599#16736599
   static std::map<int, std::tuple<float, float>> process_loads;
-
 };
 
 #endif

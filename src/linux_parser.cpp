@@ -217,39 +217,11 @@ long LinuxParser::IdleJiffies() {
   return (idle + iowait);  //  sysconf(_SC_CLK_TCK);
 }
 
+// https://knowledge.udacity.com/questions/141752
+// I still can't understand the intuition behind this approach
+// CpuUtilization for processes and the CPU is performed in processor.cpp and process.cpp
 // TODO: Read and return CPU utilization
 // vector<string>  LinuxParser::CpuUtilization() {
-
-//   // Get a list of process ids
-//   vector<int> process_ids = LinuxParser::Pids();
-
-//   // Compute the CPU load for every process
-//   vector<string> utilization;
-//   for (int pid : process_ids) {
-
-//     // CPU load
-//     long uptime = LinuxParser::UpTime(pid);
-//     float total_time = (float)LinuxParser::ActiveJiffies(pid);
-//     float elapsed = (float)uptime;
-//     // string usage = std::to_string((total_time / elapsed));
-
-//     // other attributes
-//     string command = LinuxParser::Command(pid);
-//     string ram = LinuxParser::Ram(pid);
-//     string user = LinuxParser::User(pid);
-
-//     // NOTE:
-//     // On my computer, there are pids that couldn't be found, yet picked up by LinuxParser::Pids()
-//     // Checked the /proc directory and htop and indeed some of the pids don't exist.
-//     // A workaround is to check if a user of the pid can be found, if not, the process is not going to 
-//     // be created.
-//     if (user != "NOTFOUND" && command != "" && ram != "")
-//       utilization.push_back(std::to_string(pid) + "\n" + std::to_string(total_time) + "\n" + 
-//                           std::to_string(elapsed) + "\n" + command + "\n" + ram + "\n" + 
-//                           std::to_string(uptime) + "\n" + user);
-//   }
-
-//   return utilization;
 // }
 
 // TODO: Read and return the total number of processes
@@ -326,7 +298,9 @@ string LinuxParser::Ram(int pid) {
     }
   }
 
-  return ram;
+  // Slice the last three characters (trade accuracy for speed)
+  // https://knowledge.udacity.com/questions/237138
+  return ram.substr(0, ram.length() - 3);
 }
 
 // TODO: Read and return the user ID associated with a process
@@ -364,7 +338,7 @@ string LinuxParser::User(int pid) {
 
   string uid = LinuxParser::Uid(pid);
 
-  string user;
+  string user = string();
   const string sep = ":";
   bool found = false;
 

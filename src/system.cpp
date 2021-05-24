@@ -37,6 +37,9 @@ vector<Process>& System::Processes() {
     return lhs < rhs;
   });
 
+  // Clean up the old processes
+  Process::RemoveOldProcesses(process_ids);
+
   return processes_;
 }
 

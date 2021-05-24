@@ -9,6 +9,7 @@
 #include <vector>
 
 #include <math.h>
+#include <set>
 
 #include <iostream>
 
@@ -25,7 +26,8 @@ int Process::Pid() const { return pid_; }
 float Process::CpuUtilization() const { 
   return cpu_usage_;
 }
-  
+
+// The output is similar to htop
 void Process::ComputeCpuUtilization() {
   float total_time = (float)LinuxParser::ActiveJiffies(pid_);
   float elapsed = (float)LinuxParser::UpTime(pid_);
@@ -51,21 +53,19 @@ void Process::ComputeCpuUtilization() {
     Process::process_loads[pid_] = std::make_tuple(total_time, elapsed);
 
     cpu_usage_ = ((totald - idled) / sysconf(_SC_CLK_TCK)) / totald;
-
-    // Capped at 100 %
-    if (cpu_usage_ > 1)
-      cpu_usage_ = 1;
   }
   else {
-    cpu_usage_ = (total_time / sysconf(_SC_CLK_TCK)) / elapsed;
+    // Process just launched
+    if (elapsed == 0)
+      cpu_usage_ = 0;
+    else
+      cpu_usage_ = (total_time / sysconf(_SC_CLK_TCK)) / elapsed;
   }
 }
 
 // TODO: Return the command that generated this process
 string Process::Command() { 
-  if (command_.empty())
-    command_ = LinuxParser::Command(pid_);
-  return command_;
+  return LinuxParser::Command(pid_);
 }
 
 // TODO: Return this process's memory utilization
@@ -82,4 +82,25 @@ long int Process::UpTime() { return LinuxParser::UpTime(pid_); }
 bool Process::operator<(Process const& a) const 
 { 
   return a.CpuUtilization() < CpuUtilization(); 
+}
+
+void Process::RemoveOldProcesses(const vector<int>& new_pids) {
+  // To ensure O(n) time complexity, we introduce another set, 
+  // which results in O(n) space complexity
+  std::set<int> pids; // O(1) lookup time
+
+  for (int i : new_pids)
+    pids.insert(i);
+
+  std::map<int, std::tuple<float, float>>::iterator it = Process::process_loads.begin();
+
+  while (it != Process::process_loads.end())
+  {
+    // Cannot find the process (has died)
+    if (pids.find(it->first) == pids.end())
+      it = Process::process_loads.erase(it);
+    else 
+      ++it;
+  }
+
 }
