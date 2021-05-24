@@ -17,7 +17,7 @@ using std::vector;
 std::map<int, std::tuple<float, float>> Process::process_loads;
 
 // TODO: Return this process's ID
-int Process::Pid() { return pid_; }
+int Process::Pid() const { return pid_; }
 
 // TODO: Return this process's CPU utilization
 float Process::CpuUtilization() const { 
