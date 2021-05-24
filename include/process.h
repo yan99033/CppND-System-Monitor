@@ -10,7 +10,7 @@ It contains relevant attributes as shown below
 */
 class Process {
  public:
-  Process(int pid) : pid_(pid) {}
+  Process(int pid) : pid_(pid) { ComputeCpuUtilization(); }
 
   // Added const keyword to protect the data
   int Pid() const;                         // TODO: See src/process.cpp
@@ -25,8 +25,12 @@ class Process {
  // Won't change throughout the lifetime of the process
  private:
   int pid_;
+  float cpu_usage_;
   std::string user_{std::string()};
   std::string command_{std::string()};
+
+  // Helper method to compute cpu utilization
+  void ComputeCpuUtilization();
 
   // Save the previous timing of the processes and share them across 
   // process instances, so that we can compute more recent CPU usage of the 
