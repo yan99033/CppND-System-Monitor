@@ -41,11 +41,54 @@ enum CPUStates {
   kGuestNice_
 };
 
+// templatized line search by key
+template <class T>
+T findValueByKey(const std::string& keyFilter, const std::string& filename)
+{
+  std::string key;
+  std::string line;
+  T value;
+
+  std::ifstream stream(filename);
+  if (stream.is_open()) {
+    while (getline(stream, line)) {
+      std::istringstream linestream(line);
+      linestream >> key;
+
+      if (key == keyFilter) {
+        linestream >> value;
+        break;
+      }
+    }
+  }
+  stream.close();
+
+  return value;
+}
+
+template <class T>
+T getValueOfFile(const std::string& filename)
+{
+  T value;
+  std::string line;
+
+  std::ifstream stream(filename);
+  if (stream.is_open()) {
+    getline(stream, line);
+    std::istringstream linestream(line);
+    linestream >> value;
+  }
+
+  stream.close();
+
+  return value;
+}
+
 // https://knowledge.udacity.com/questions/141752
 // I still can't understand the intuition behind this approach
 // std::vector<std::string> CpuUtilization();
 
-
+void GetJiffies(long& user, long& nice, long& system, long& idle, long& iowait, long& irq, long& softirq, long& steal);
 long Jiffies();
 long ActiveJiffies();
 long ActiveJiffies(int pid);
