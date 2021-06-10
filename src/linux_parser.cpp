@@ -95,13 +95,13 @@ float LinuxParser::MemoryUtilization() {
         memtotal = num;
       else if (str == filterMemFreeString)
         memfree = num;
-      else if (str == "Buffers:")
+      else if (str == filterMemBuffers)
         buffers = num;
-      else if (str == "Cached:")
+      else if (str == filterMemCached)
         cached = num;
-      else if (str == "Shmem:")
+      else if (str == filterMemShmem)
         shmem = num;
-      else if (str == "SReclaimable:") {
+      else if (str == filterMemSReclaimable) {
         sreclaimable = num;
         break;  // We know that this is the last number to extract
       }
