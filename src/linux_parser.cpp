@@ -91,9 +91,9 @@ float LinuxParser::MemoryUtilization() {
       std::istringstream linestream(line);
       linestream >> str >> num;
 
-      if (str == "MemTotal:")
+      if (str == filterMemTotalString)
         memtotal = num;
-      else if (str == "MemFree:")
+      else if (str == filterMemFreeString)
         memfree = num;
       else if (str == "Buffers:")
         buffers = num;
@@ -239,7 +239,7 @@ long LinuxParser::IdleJiffies() {
 // (DONE) TODO: Read and return the total number of processes
 int LinuxParser::TotalProcesses() {
 
-  int totalprocesses = findValueByKey<int>("processes", kProcDirectory + kStatFilename);
+  int totalprocesses = findValueByKey<int>(filterProcesses, kProcDirectory + kStatFilename);
 
   return totalprocesses;
 }
@@ -247,7 +247,7 @@ int LinuxParser::TotalProcesses() {
 // (DONE) TODO: Read and return the number of running processes
 int LinuxParser::RunningProcesses() {
 
-  int procsrunning = findValueByKey<int>("procs_running", kProcDirectory + kStatFilename);
+  int procsrunning = findValueByKey<int>(filterRunningProcesses, kProcDirectory + kStatFilename);
 
   return procsrunning;
 }
@@ -270,7 +270,7 @@ string LinuxParser::Command(int pid) {
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Ram(int pid) {
 
-  string ram = findValueByKey<string>("VmData", kProcDirectory + std::to_string(pid) + kStatusFilename);
+  string ram = findValueByKey<string>(filterProcMem, kProcDirectory + std::to_string(pid) + kStatusFilename);
 
   // Slice the last three characters (trade accuracy for speed)
   // https://knowledge.udacity.com/questions/237138
@@ -281,7 +281,7 @@ string LinuxParser::Ram(int pid) {
 // REMOVE: [[maybe_unused]] once you define the function
 string LinuxParser::Uid(int pid) {
 
-  string uid = findValueByKey<string>("Uid:", kProcDirectory + std::to_string(pid) + kStatusFilename);
+  string uid = findValueByKey<string>(filterUID, kProcDirectory + std::to_string(pid) + kStatusFilename);
 
   return uid;
 }
