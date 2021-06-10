@@ -1,5 +1,16 @@
 # CppND-System-Monitor
 
+The end product of the assignment:
+![Live System Monitor](images/live.gif)
+
+
+The code meets basic requirements with several enhancements:
+- Calculate CPU utilization dynamically, based on recent utilization
+- Sort processes based on CPU utilization
+- Fix visualization [bug](https://github.com/udacity/CppND-System-Monitor/pull/22)
+
+## Starter code
+
 Starter code for System Monitor Project in the Object Oriented Programming Course of the [Udacity C++ Nanodegree Program](https://www.udacity.com/course/c-plus-plus-nanodegree--nd213). 
 
 Follow along with the classroom lesson to complete the project!
