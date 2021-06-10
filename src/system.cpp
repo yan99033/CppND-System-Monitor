@@ -36,8 +36,6 @@ vector<Process>& System::Processes() {
     Process process(pid);
     if (!process.Command().empty())
       processes_.push_back(process);
-
-    // processes_.push_back(Process(pid));
   }
 
   std::sort(processes_.begin(), processes_.end(), []( Process const& lhs, Process const& rhs) {
